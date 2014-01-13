@@ -169,7 +169,12 @@ module Mail
 
       # Windows-1252 and alike
       when /^windows-?(.*)$/
-        "Windows-#{$1}"
+        # Ruby can't convert Windows-1258 to UTF-8, Windows-1252 is close enough for us
+        if $1 == "1258"
+          "Windows-1252"
+        else
+          "Windows-#{$1}"
+        end
 
       when '8bit'
         Encoding::ASCII_8BIT
