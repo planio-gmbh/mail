@@ -211,7 +211,11 @@ module Mail
         'ISO-8859-1'
 
       else
-        charset
+        begin
+          Encoding.find(charset)
+        rescue ArgumentError
+          'ISO-8859-1'
+        end
       end
 
       convert_to_encoding(encoding)
