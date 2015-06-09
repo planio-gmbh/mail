@@ -141,6 +141,11 @@ module Mail
       when /gb2312/i
         Encoding::GB18030
 
+      # mostly similar
+      # see https://github.com/mikel/mail/commit/3b243a318b8621159fcafb0544b799859378313a
+      when /ansi_x3.110-1983/
+        'ISO-8859-1'
+
       else
         charset
       end
