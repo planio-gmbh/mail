@@ -205,6 +205,11 @@ module Mail
       when 'latin2'
         Encoding::ISO_8859_2
 
+      # mostly similar
+      # see https://github.com/mikel/mail/commit/3b243a318b8621159fcafb0544b799859378313a
+      when /ansi_x3.110-1983/
+        'ISO-8859-1'
+
       else
         charset
       end
