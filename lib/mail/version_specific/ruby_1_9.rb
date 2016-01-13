@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require 'net/imap'
+
 module Mail
   class Ruby19
 
@@ -76,8 +78,14 @@ module Mail
       end
       decoded = str.encode("utf-8", :invalid => :replace, :replace => "")
       decoded.valid_encoding? ? decoded : decoded.encode("utf-16le", :invalid => :replace, :replace => "").encode("utf-8")
-    rescue Encoding::UndefinedConversionError
-      str.dup.force_encoding("utf-8")
+    rescue Encoding::UndefinedConversionError, Encoding::ConverterNotFoundError
+      if charset.downcase == 'utf-7'
+        str.force_encoding('utf-8')
+        str = Net::IMAP.decode_utf7(str)
+        str.force_encoding('utf-8')
+      else
+        str.force_encoding(pick_encoding(charset))
+      end
     end
 
     def Ruby19.param_decode(str, encoding)
