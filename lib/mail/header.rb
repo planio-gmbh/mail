@@ -203,7 +203,13 @@ module Mail
       buffer = ''
       buffer.force_encoding('us-ascii') if buffer.respond_to?(:force_encoding)
       fields.each do |field|
-        buffer << field.encoded
+        begin
+          buffer << field.encoded
+        rescue Mail::Field::ParseError
+          # If the field can't be parsed properly for any reason, we ignore it
+          # in the output.
+          next
+        end
       end
       buffer
     end
