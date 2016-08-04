@@ -191,6 +191,11 @@ module Mail
       when /^iso[-_]?8859-(\d+)(-i)?$/
         "ISO-8859-#{$1}"
 
+      # ISO-10646 is more or less UTF-8 and trips the following match if not
+      # handled explicitely before it
+      when /^iso-10646$/i
+        "UTF-8"
+
       # ISO-8859-15, ISO-2022-JP and alike
       when /^iso[-_]?(\d{4})-?(\w{1,2})$/
         "ISO-#{$1}-#{$2}"
