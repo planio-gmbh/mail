@@ -20,6 +20,7 @@ module Mail
     end
     
     def cleaned(string)
+      string = Mail::Encodings.value_decode(string).encode('US-ASCII', invalid: :replace, undef: :replace, replace: '_')
       string =~ /(.+);\s*$/ ? $1 : string
     end
     
