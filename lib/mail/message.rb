@@ -2146,7 +2146,7 @@ module Mail
         disp.disposition_type == 'attachment' and
         header[:content_type].to_s =~ /^message\/rfc822/
         # invent a filename for nameless attached emails
-        filename = Mail.new(body).subject + '.eml'
+        filename = (Mail.new(body).subject || "email") + '.eml'
       end
 
       filename = Mail::Encodings.decode_encode(filename, :decode) if filename rescue filename
