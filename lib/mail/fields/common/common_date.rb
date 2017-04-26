@@ -8,7 +8,11 @@ module Mail
     end
 
     def default
-      date_time
+      unless Utilities.blank?(value)
+        date_time
+      else
+        nil
+      end
     end
     
     def parse(val = value)
