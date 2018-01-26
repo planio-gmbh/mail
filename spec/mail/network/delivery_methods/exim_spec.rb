@@ -27,11 +27,9 @@ describe "exim delivery agent" do
       to      'marcel@test.lindsaar.net, bob@test.lindsaar.net'
       subject 'invalid RFC2822'
     end
-    
-    expect(Mail::Exim).to receive(:call).with('/usr/sbin/exim', 
-                                          '-i -t -f "roger@test.lindsaar.net" --', 
-                                          '"marcel@test.lindsaar.net" "bob@test.lindsaar.net"', 
-                                          mail.encoded)
+
+    expect(Mail::Sendmail).to receive(:call).with('/usr/sbin/exim', '-i -t -f "roger@test.lindsaar.net" --', nil, mail.encoded)
+
     mail.deliver!
   end
 
@@ -51,14 +49,10 @@ describe "exim delivery agent" do
         message_id "<1234@test.lindsaar.net>"
         body "body"
       end
-      
-      expect(Mail::Exim).to receive(:call).with('/usr/sbin/exim',
-                                                '-i -t -f "return@test.lindsaar.net" --', 
-                                                '"to@test.lindsaar.net"', 
-                                                mail.encoded)
-                                                
-      mail.deliver
 
+      expect(Mail::Sendmail).to receive(:call).with('/usr/sbin/exim', '-i -t -f "return@test.lindsaar.net" --', nil, mail.encoded)
+
+      mail.deliver
     end
 
     it "should use the sender address is no return path is specified" do
@@ -75,14 +69,11 @@ describe "exim delivery agent" do
         body "body"
       end
 
-      expect(Mail::Exim).to receive(:call).with('/usr/sbin/exim',
-                                                '-i -t -f "sender@test.lindsaar.net" --', 
-                                                '"to@test.lindsaar.net"', 
-                                                mail.encoded)
+      expect(Mail::Sendmail).to receive(:call).with('/usr/sbin/exim', '-i -t -f "sender@test.lindsaar.net" --', nil, mail.encoded)
 
       mail.deliver
     end
-    
+
     it "should use the from address is no return path or sender are specified" do
       Mail.defaults do
         delivery_method :exim
@@ -96,10 +87,8 @@ describe "exim delivery agent" do
         body "body"
       end
 
-      expect(Mail::Exim).to receive(:call).with('/usr/sbin/exim',
-                                                '-i -t -f "from@test.lindsaar.net" --', 
-                                                '"to@test.lindsaar.net"', 
-                                                mail.encoded)
+      expect(Mail::Sendmail).to receive(:call).with('/usr/sbin/exim', '-i -t -f "from@test.lindsaar.net" --', nil, mail.encoded)
+
       mail.deliver
     end
 
@@ -116,10 +105,8 @@ describe "exim delivery agent" do
         body 'body'
       end
 
-      expect(Mail::Exim).to receive(:call).with('/usr/sbin/exim',
-                                                '-i -t -f "\"from+suffix test\"@test.lindsaar.net" --',
-                                                '"to@test.lindsaar.net"',
-                                                mail.encoded)
+      expect(Mail::Sendmail).to receive(:call).with('/usr/sbin/exim', '-i -t -f "\"from+suffix test\"@test.lindsaar.net" --', nil, mail.encoded)
+
       mail.deliver
     end
 
@@ -133,10 +120,8 @@ describe "exim delivery agent" do
         from 'from@test.lindsaar.net'
       end
 
-      expect(Mail::Exim).to receive(:call).with('/usr/sbin/exim',
-                                                '-i -t -f "from@test.lindsaar.net" --',
-                                                '"-hyphen@test.lindsaar.net"',
-                                                mail.encoded)
+      expect(Mail::Sendmail).to receive(:call).with('/usr/sbin/exim', '-i -t -f "from@test.lindsaar.net" --', nil, mail.encoded)
+
       mail.deliver
     end
   end
@@ -152,10 +137,8 @@ describe "exim delivery agent" do
       subject 'invalid RFC2822'
     end
     
-    expect(Mail::Exim).to receive(:call).with('/usr/sbin/exim', 
-                                              ' -f "from@test.lindsaar.net" --',
-                                              '"marcel@test.lindsaar.net" "bob@test.lindsaar.net"', 
-                                              mail.encoded)
+    expect(Mail::Sendmail).to receive(:call).with('/usr/sbin/exim', ' -f "from@test.lindsaar.net" --', nil, mail.encoded)
+
     mail.deliver!
   end
 
@@ -169,11 +152,13 @@ describe "exim delivery agent" do
       to      'marcel@test.lindsaar.net'
       subject 'invalid RFC2822'
     end
-    
-    expect(Mail::Exim).to receive(:call).with('/usr/sbin/exim', 
-                                              " -f \"\\\"foo\\\\\\\"\\;touch /tmp/PWNED\\;\\\\\\\"\\\"@blah.com\" --",
-                                              '"marcel@test.lindsaar.net"', 
-                                              mail.encoded)
+
+    expect(Mail::Sendmail).to receive(:call).with(
+      '/usr/sbin/exim',
+      " -f \"\\\"foo\\\\\\\"\\;touch /tmp/PWNED\\;\\\\\\\"\\\"@blah.com\" --",
+      nil,
+      mail.encoded)
+
     mail.deliver!
   end
 
@@ -187,7 +172,7 @@ describe "exim delivery agent" do
         subject "Email with no sender"
         body "body"
       end
-    end.to raise_error('An SMTP From address is required to send a message. Set the message smtp_envelope_from, return_path, sender, or from address.')
+    end.to raise_error('SMTP From address may not be blank: nil')
   end
 
   it "should raise an error if no recipient if defined" do
@@ -200,6 +185,6 @@ describe "exim delivery agent" do
         subject "Email with no recipient"
         body "body"
       end
-    end.to raise_error('An SMTP To address is required to send a message. Set the message smtp_envelope_to, to, cc, or bcc address.')
+    end.to raise_error('SMTP To address may not be blank: []')
   end
 end

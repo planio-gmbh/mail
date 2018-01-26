@@ -1,6 +1,20 @@
-== Version 2.6.5 - Unreleased
+== Version 2.6.6 - 2017-06-09 Jeremy Daer <jeremydaer@gmail.com>
 
+Security:
+* #1097 – SMTP security: prevent command injection via To/From addresses. (jeremy)
+
+Bugs:
+* #689 - Fix Exim delivery method broken by #477 in 2.5.4. (jethrogb)
+
+== Version 2.6.5 - 2017-04-26 Jeremy Daer <jeremydaer@gmail.com>
+
+Features:
+* #1053 - Ruby 2.4.0 compatibility. Fixnum+Bignum unified as Integer. (peterkovacs)
+
+Bugs:
+* #605 - Fix Mail::Address#name for nil addresses (peterkovacs)
 * #1003 - Fix decoding some b encoded headers on specific rubies that don't account for lack of base64 padding (kjg)
+* #1023 - Fix double-quoting in display names. (garethrees)
 
 == Version 2.6.4 - Wed Mar 23 08:16 -0700 2016 Jeremy Daer <jeremydaer@gmail.com>
 

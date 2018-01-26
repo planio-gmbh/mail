@@ -38,17 +38,19 @@ module Mail
   #
   #   mail.deliver!
   class Sendmail
-    include Mail::CheckDeliveryParams
-
-    def initialize(values)
-      self.settings = { :location       => '/usr/sbin/sendmail',
-                        :arguments      => '-i' }.merge(values)
-    end
+    DEFAULTS = {
+      :location   => '/usr/sbin/sendmail',
+      :arguments  => '-i'
+    }
 
     attr_accessor :settings
 
+    def initialize(values)
+      self.settings = self.class::DEFAULTS.merge(values)
+    end
+
     def deliver!(mail)
-      smtp_from, smtp_to, message = check_delivery_params(mail)
+      smtp_from, smtp_to, message = Mail::CheckDeliveryParams.check(mail)
 
       from = "-f #{self.class.shellquote(smtp_from)}"
       to = smtp_to.map { |_to| self.class.shellquote(_to) }.join(' ')
