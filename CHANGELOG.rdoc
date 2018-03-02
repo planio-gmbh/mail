@@ -1,5 +1,7 @@
 == Version 2.7.2 (unreleased)
 
+Compatibility:
+* Normalize Quoted-Printable line endings for text content. (jeremy)
 
 == Version 2.7.1 (2018-10-13)
 
