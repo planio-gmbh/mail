@@ -19,6 +19,10 @@ describe Mail::Encodings::UnixToUnix do
     expect(Mail::Encodings::UnixToUnix.can_transport?('uuencode')).to be_truthy
   end
 
+  it "can transport x-uue" do
+    expect(Mail::Encodings::UnixToUnix.can_transport?('x-uue')).to be_truthy
+  end
+
   it "decodes" do
     text = strip_heredoc(<<-TEXT)
       begin 644 Happy.txt
