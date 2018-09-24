@@ -40,6 +40,7 @@ module Mail
       private
 
       Encodings.register(NAME, self)
+      Encodings.register("quote", self)
     end
   end
 end
