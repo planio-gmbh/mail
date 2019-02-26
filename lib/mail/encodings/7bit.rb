@@ -9,6 +9,7 @@ module Mail
       NAME = '7bit'
       PRIORITY = 1
       Encodings.register(NAME, self)
+      Encodings.register('bit7', self)
 
       def self.decode(str)
         ::Mail::Utilities.binary_unsafe_to_lf str
