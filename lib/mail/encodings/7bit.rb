@@ -27,6 +27,7 @@ module Mail
       end
 
       Encodings.register(NAME, self) 
+      Encodings.register('bit7', self)
     end
   end
 end
