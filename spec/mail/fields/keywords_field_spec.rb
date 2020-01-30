@@ -68,4 +68,9 @@ describe Mail::KeywordsField do
     lines.each { |line| expect(line.length).to be < 998 }
   end
 
+  it "should handle a blank value" do
+    k = Mail::KeywordsField.new('')
+    expect(k.decoded).to eq ''
+    expect(k.encoded).to eq "Keywords: \r\n"
+  end
 end

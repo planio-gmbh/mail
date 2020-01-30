@@ -29,15 +29,27 @@ module Mail
     end
     
     def encoded
-      "#{CAPITALIZED_FIELD}: #{keywords.join(",\r\n ")}\r\n"
+      if Utilities.blank?(value)
+        "#{CAPITALIZED_FIELD}: \r\n"
+      else
+        "#{CAPITALIZED_FIELD}: #{keywords.join(",\r\n ")}\r\n"
+      end
     end
     
     def decoded
-      keywords.join(', ')
+      if Utilities.blank?(value)
+        ""
+      else
+        keywords.join(', ')
+      end
     end
 
     def default
-      keywords
+      if Utilities.blank?(value)
+        []
+      else
+        keywords
+      end
     end
     
   end
